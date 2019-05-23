@@ -27,6 +27,7 @@ class highlightPointsOnMetrics(BaseWindowController):
         removeObserver(self, 'draw')
         super(highlightPointsOnMetrics, self).windowCloseCallback(sender)
 
+
     def highlightPoints(self, info):
         # check if checkbox is selected
         if not self.w.showPoints.get():
@@ -35,6 +36,9 @@ class highlightPointsOnMetrics(BaseWindowController):
         # get the current glyph
         glyph = info["glyph"]
         sc = info['scale']
+
+        # Anything more than 3 could be considered an intentional overshoot?
+        rang = 3 
 
         asc = f.info.ascender
         xhe = f.info.xHeight
@@ -48,12 +52,15 @@ class highlightPointsOnMetrics(BaseWindowController):
                 for s in c:
                     for p in s:
                         if p.y == asc or p.y == xhe or p.y == cap or p.y == dsc or p.y == 0:
+                            pass
+                        else:
+                            if (asc+-rang <= p.y <= asc+rang) or (xhe+-rang <= p.y <= xhe+rang) or (cap+-rang <= p.y <= cap+rang) or (dsc+-rang <= p.y <= dsc+rang) or (-rang <= p.y <= rang):
 
                             # fill(1, 0, 0, .6)
                             
-                            fill(None)
-                            stroke(0, 0.8, 0.8, .8)
-                            strokeWidth(3 * sc)
-                            rect(p.x-size/2, p.y-size/2, size, size)
+                                fill(None)
+                                stroke(1.0, 0.0, 0.0, .5)
+                                strokeWidth(7 * sc)
+                                oval(p.x-size/2, p.y-size/2, size, size)
 
 highlightPointsOnMetrics()
